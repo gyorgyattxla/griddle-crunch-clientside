@@ -1,59 +1,81 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-
+import { IonContent, IonPage } from '@ionic/react';
 import './Login.css';
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></link>
 
 const Login: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Griddle & Crunch</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Griddle & Crunch</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <div className="login-container">
-            <div className="left-side"></div>
-            <div className="right-side">
+      <IonContent>
+        <div className="login-page">
+          <div className="login-container">
+            
+            {/* Bal oldali kép */}
+            <div className="image-side"></div>
+
+            {/* Jobb oldali űrlap */}
+            <div className="form-side">
+              <div className="login-card">
                 <div className="logo-img">
-                <img alt='logo' src=''></img>
+                  <img alt="logo" src="/assets/logo.png" />
                 </div>
+
                 <div className="header">
-                    <div className="big-text">
-                        Login to your Account
-                    </div>
-                    <div className="small-text">
-                        See what is going on with your business.
-                    </div>
+                  <h2>Login to your Account</h2>
+                  <p>See what is going on with your business.</p>
                 </div>
-                <div className="google-button">
-                    <button type="submit" className="btn btn-primary">Google Login</button>
-                </div>
-                <div className="spacer">
-                    or Sign in with Email
-                </div>
-                <div className="login-from">
-                    <form action="login">
-                        <div className="mb-3">
-                            <label htmlFor="email" className="form-label">Email address</label>
-                            <input type="email" className="form-control" id="email" placeholder="name@example.com"></input>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="password" className="form-label">Password</label>
-                            <input type="password" className="form-control" id="password" placeholder="Password"></input>
-                        </div>
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                    </form>
-                </div>
+
+                <button className="btn btn-outline-secondary w-75 mb-3 google-btn">
+                  <img
+                    src="https://img.icons8.com/color/16/000000/google-logo.png"
+                    alt="Google"
+                  />
+                  &nbsp; Continue with Google
+                </button>
+
+                <div className="divider-text">or sign in with email</div>
+
+                <form className="login-form">
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      placeholder="me@domain.com"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="password"
+                      placeholder="Password"
+                    />
+                  </div>
+
+                  <button type="submit" className="btn btn-primary w-100 login-btn">
+                    Login
+                  </button>
+                  <div className="login-footer">
+                  <div className="text-center mt-3">
+                    <a href="#">Forgot Password?</a>
+                  </div>
+
+                  <div className="text-center mt-3">
+                    Not registered yet? <a href="#">Create an account</a>
+                  </div>
+                  </div>
+                </form>
+              </div>
             </div>
+
+          </div>
         </div>
-        
       </IonContent>
     </IonPage>
   );
