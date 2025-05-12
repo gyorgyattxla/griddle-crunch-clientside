@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">griddle-crunch-clientside</string>
+    <string name="title_activity_main">griddle-crunch-clientside</string>
+    <string name="package_name">griddle.crunch.clientside</string>
+    <string name="custom_url_scheme">griddle.crunch.clientside</string>
+</resources>
