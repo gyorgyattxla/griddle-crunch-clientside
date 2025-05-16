@@ -14,16 +14,16 @@ import './Home.css';
 const Home: React.FC = () => {
   const history = useHistory();
   const [cartOpen, setCartOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categories, setCategories] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [products, setProducts] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const toggleCart = () => setCartOpen(prev => !prev);
 
   useEffect(() => {
-    fetchProducts().then(setProducts).catch(() => {});
+    fetchProducts()
+      .then(data => setProducts(data))
+      .catch(err => setError(err.message));
 
     fetchCategories()
       .then(data => setCategories(data))
@@ -86,12 +86,9 @@ const Home: React.FC = () => {
           <h2>Categories</h2>
           <Swiper spaceBetween={10} slidesPerView={3} breakpoints={{ 768: { slidesPerView: 6 } }}>
             {(categories.length ? categories : [
-              { name: 'Zöldség', iconUrl: '/assets/ad-image-1.png' },
-              { name: 'Gyümölcs', iconUrl: '/assets/ad-image-2.png' },
-              { name: 'Ital', iconUrl: '/assets/ad-image-3.png' }
             ]).map((cat, idx) => (
               <SwiperSlide key={idx} className="category-slide">
-                <img src={cat.iconUrl} alt={cat.name} />
+                <img src={cat.image} alt={cat.name} />
                 <p>{cat.name}</p>
               </SwiperSlide>
             ))}
@@ -103,15 +100,9 @@ const Home: React.FC = () => {
           <h2>Products</h2>
           <div className="product-grid">
             {(products.length ? products : [
-              { id: 1, name: 'Uborka', price: 450, imageUrl: '/assets/thumb-cucumber.png' },
-              { id: 2, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
-              { id: 3, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
-              { id: 4, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
-              { id: 5, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
-              { id: 6, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' }
             ]).map(product => (
               <div className="product-card" key={product.id}>
-                <img src={product.imageUrl} alt={product.name} />
+                <img src={product.image} alt={product.name} />
                 <h4>{product.name}</h4>
                 <p>{product.price} Ft</p>
                 <IonButton size="small">Buy</IonButton>
