@@ -7,7 +7,6 @@ import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetchCategories } from '../api/categoryApi';
 import { fetchProducts } from '../api/productApi';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import './Home.css';
 
@@ -63,7 +62,7 @@ const Home: React.FC = () => {
           <div className="hero-text">
             <h2>Griddle &Crunch</h2>
             <p>Best Fast Foods in your Area</p>
-            <IonButton color="success">ORDER</IonButton>
+            <button className='order_btn'>ORDER</button>
           </div>
           <div className="hero-image">
             <img src="/assets/fast_foods.png" alt="hero" />
@@ -77,21 +76,30 @@ const Home: React.FC = () => {
           <div className="info-card">💳 Pay Without Contact</div>
         </section>
 
-        {/* Kategória swiper */}
+        {/* Kategória sáv*/}
         <section className="category-carousel">
-          <h2>Categories</h2>
-          <Swiper spaceBetween={10} slidesPerView={3} breakpoints={{ 768: { slidesPerView: 6 } }}>
+          <h2>Kategóriák</h2>
+          <div className="category-scroll">
             {(categories.length ? categories : [
               { name: 'Zöldség', iconUrl: '/assets/ad-image-1.png' },
               { name: 'Gyümölcs', iconUrl: '/assets/ad-image-2.png' },
-              { name: 'Ital', iconUrl: '/assets/ad-image-3.png' }
+              { name: 'Ital', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Snack', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Hús', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Tejtermék', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Tejtermék', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Tejtermék', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Tejtermék', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Tejtermék', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Tejtermék', iconUrl: '/assets/ad-image-3.png' },
+              { name: 'Tejtermék', iconUrl: '/assets/ad-image-3.png' }
             ]).map((cat, idx) => (
-              <SwiperSlide key={idx} className="category-slide">
+              <div key={idx} className="category-box">
                 <img src={cat.iconUrl} alt={cat.name} />
                 <p>{cat.name}</p>
-              </SwiperSlide>
+              </div>
             ))}
-          </Swiper>
+          </div>
         </section>
 
         {/* Termékek */}
