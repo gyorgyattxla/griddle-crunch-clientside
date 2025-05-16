@@ -1,30 +1,33 @@
 import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonButton,
-  IonIcon
+  IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
+  IonButtons, IonButton, IonIcon
 } from '@ionic/react';
 import { cartOutline, closeOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
-import './Home.css';
-
-// Swiper CSS importálása külön fájlban is kell!
-import 'swiper/css';
+import { useState, useEffect } from 'react';
+import { fetchCategories } from '../api/categoryApi';
+import { fetchProducts } from '../api/productApi';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import './Home.css';
 
 const Home: React.FC = () => {
   const history = useHistory();
   const [cartOpen, setCartOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [categories, setCategories] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [products, setProducts] = useState<any[]>([]);
+
   const toggleCart = () => setCartOpen(prev => !prev);
+
+  useEffect(() => {
+    fetchCategories().then(setCategories).catch(() => {});
+    fetchProducts().then(setProducts).catch(() => {});
+  }, []);
 
   return (
     <IonPage>
-      {/* Meglévő NAVBAR marad */}
       <IonHeader>
         <IonToolbar>
           <IonTitle>Griddle & Crunch</IonTitle>
@@ -42,7 +45,7 @@ const Home: React.FC = () => {
 
       <IonContent fullscreen>
 
-        {/* Kosár oldalsáv */}
+        {/* Kosár panel */}
         <div className={`cart-panel ${cartOpen ? 'open' : ''}`}>
           <div className="cart-header">
             <h3>Kosár</h3>
@@ -55,71 +58,71 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        {/* HERO SWIPER */}
-        <section className="hero-swiper">
-          <Swiper spaceBetween={10} slidesPerView={1} loop={true}>
-            <SwiperSlide>
-              <div className="slide-content">
-                <div>
-                  <div className="category">100% natural</div>
-                  <h3>Fresh Smoothie & Summer Juice</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                  <IonButton color="dark">Shop Now</IonButton>
-                </div>
-                <img src="/assets/product-thumb-1.png" alt="Product" />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="slide-content">
-                <div>
-                  <div className="category">100% natural</div>
-                  <h3>Heinz Tomato Ketchup</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                  <IonButton color="dark">Shop Collection</IonButton>
-                </div>
-                <img src="/assets/product-thumb-1.png" alt="Product" />
-              </div>
-            </SwiperSlide>
-          </Swiper>
+        {/* Hero szekció */}
+        <section className="hero-section">
+          <div className="hero-text">
+            <h2>Griddle &Crunch</h2>
+            <p>Best Fast Foods in your Area</p>
+            <IonButton color="success">ORDER</IonButton>
+          </div>
+          <div className="hero-image">
+            <img src="/assets/fast_foods.png" alt="hero" />
+          </div>
         </section>
 
-        {/* KATEGÓRIÁK SWIPER */}
+        {/* Infó kártyák */}
+        <section className="info-cards">
+          <div className="info-card">🚚 Fast Delivery</div>
+          <div className="info-card">🥬 Fresh Ingredients</div>
+          <div className="info-card">💳 Pay Without Contact</div>
+        </section>
+
+        {/* Kategória swiper */}
         <section className="category-carousel">
+          <h2>Categories</h2>
           <Swiper spaceBetween={10} slidesPerView={3} breakpoints={{ 768: { slidesPerView: 6 } }}>
-            {[
-              'icon-vegetables-broccoli.png',
-              'icon-bread-baguette.png',
-              'icon-soft-drinks-bottle.png',
-              'icon-wine-glass-bottle.png',
-              'icon-animal-products-drumsticks.png',
-            ].map((icon, index) => (
-              <SwiperSlide key={index} className="category-slide">
-                <img src={`/assets/${icon}`} alt="Category" />
-                <p>Fruits & Veges</p>
+            {(categories.length ? categories : [
+              { name: 'Zöldség', iconUrl: '/assets/ad-image-1.png' },
+              { name: 'Gyümölcs', iconUrl: '/assets/ad-image-2.png' },
+              { name: 'Ital', iconUrl: '/assets/ad-image-3.png' }
+            ]).map((cat, idx) => (
+              <SwiperSlide key={idx} className="category-slide">
+                <img src={cat.iconUrl} alt={cat.name} />
+                <p>{cat.name}</p>
               </SwiperSlide>
             ))}
           </Swiper>
         </section>
 
-        {/* TERMÉKEK */}
+        {/* Termékek */}
         <section className="products">
-          <h2>Newly Arrived Brands</h2>
+          <h2>Products</h2>
           <div className="product-grid">
-            <div className="product-card">
-              <img src="/assets/thumb-cucumber.png" alt="Cucumber" />
-              <h4>Melon Juice</h4>
-              <p>$18.00</p>
-              <IonButton size="small">Kosárba</IonButton>
-            </div>
-            <div className="product-card">
-              <img src="/assets/thumb-cucumber.png" alt="Cucumber" />
-              <h4>Tomato Sauce</h4>
-              <p>$10.50</p>
-              <IonButton size="small">Kosárba</IonButton>
-            </div>
+            {(products.length ? products : [
+              { id: 1, name: 'Uborka', price: 450, imageUrl: '/assets/thumb-cucumber.png' },
+              { id: 2, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
+              { id: 3, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
+              { id: 4, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
+              { id: 5, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' },
+              { id: 6, name: 'Paradicsom', price: 399, imageUrl: '/assets/product-thumb-1.png' }
+            ]).map(product => (
+              <div className="product-card" key={product.id}>
+                <img src={product.imageUrl} alt={product.name} />
+                <h4>{product.name}</h4>
+                <p>{product.price} Ft</p>
+                <IonButton size="small">Buy</IonButton>
+              </div>
+            ))}
           </div>
         </section>
 
+        {/* Banner / Kupon */}
+        <section className="promo-banner">
+          <div className="promo-content">
+            <h3>✨ 25% Off From Your First Order</h3>
+            <p>CODE: <strong> WELCOME25</strong></p>
+          </div>
+        </section>
       </IonContent>
     </IonPage>
   );
