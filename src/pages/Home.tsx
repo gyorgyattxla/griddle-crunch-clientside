@@ -2,12 +2,16 @@ import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
   IonButtons, IonButton, IonIcon
 } from '@ionic/react';
-import { cartOutline, closeOutline } from 'ionicons/icons';
+import { cartOutline, closeOutline, walletOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { fetchCategories } from '../api/categoryApi';
-import { fetchProducts } from '../api/productApi';
+import { fetchCategories } from '../api/Api';
+import { fetchProducts } from '../api/Api';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { CartProvider } from '../context/cartContext';
+import { useCart } from '../context/cartContext';
+
 import 'swiper/css';
 import './Home.css';
 
@@ -17,8 +21,10 @@ const Home: React.FC = () => {
   const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const { cart, addToCart, removeFromCart, getFinalAmount } = useCart();
 
   const toggleCart = () => setCartOpen(prev => !prev);
+  const openCart = () => setCartOpen(true);
 
   useEffect(() => {
     fetchProducts()
@@ -31,7 +37,8 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <IonPage>
+  
+    <IonPage>    
       <IonHeader>
         <IonToolbar>
           <IonTitle>Griddle & Crunch</IonTitle>
@@ -48,26 +55,56 @@ const Home: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-
         {/* Kosár panel */}
-        <div className={`cart-panel ${cartOpen ? 'open' : ''}`}>
-          <div className="cart-header">
-            <h3>Kosár</h3>
-            <IonButton fill="clear" onClick={toggleCart}>
-              <IonIcon icon={closeOutline} />
-            </IonButton>
-          </div>
-          <div className="cart-content">
-            <p>A kosarad üres.</p>
-          </div>
+      <div className={`cart-panel ${cartOpen ? 'open' : ''}`}>
+        <div className="cart-header">
+          <h3>Kosár</h3>
+          <IonButton fill="clear" onClick={toggleCart}>
+            <IonIcon icon={closeOutline} />
+          </IonButton>
         </div>
+
+        <div className="cart-content">
+          {cart.length === 0 ? (
+            <p>A kosarad üres.</p>
+          ) : (
+            <>
+          <ul>
+            {cart.map((item) => (
+              <li key={item.id} className="cart-item">
+              <span>{item.name}</span>
+              <span>{item.quantity} x {item.price} Ft</span>
+              <IonButton
+                fill="clear"
+                color="danger"
+                size="small"
+                onClick={() => removeFromCart(item.id)}
+              >
+                Törlés
+              </IonButton>
+            </li>
+            ))}
+          </ul>
+        <div className="cart-total">
+          <h4>Összesen: {getFinalAmount()} Ft</h4>
+        </div>
+        <div className='checkout-btn'>
+          <IonButton onClick={() => history.push('/checkout')}>
+          <IonIcon icon={walletOutline} /> Fizetéshez
+          </IonButton>
+        </div>
+      </>
+          )}
+          
+        </div>
+      </div>
 
         {/* Hero szekció */}
         <section className="hero-section">
           <div className="hero-text">
             <h2>Griddle &Crunch</h2>
             <p>Best Fast Foods in your Area</p>
-            <IonButton color="success">ORDER</IonButton>
+            <button className='order_btn'>ORDER</button>
           </div>
           <div className="hero-image">
             <img src="/assets/fast_foods.png" alt="hero" />
@@ -105,7 +142,7 @@ const Home: React.FC = () => {
                 <img src={product.image} alt={product.name} />
                 <h4>{product.name}</h4>
                 <p>{product.price} Ft</p>
-                <IonButton size="small">Buy</IonButton>
+                <IonButton onClick={() => { addToCart(product); openCart(); }} size="small">Buy</IonButton>
               </div>
             ))}
           </div>
@@ -120,6 +157,7 @@ const Home: React.FC = () => {
         </section>
       </IonContent>
     </IonPage>
+    
   );
 };
 
