@@ -1,0 +1,72 @@
+.register-content {
+  max-width: 100%;
+  margin: 3rem auto 2rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #33475b;
+}
+
+.register-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.error-text {
+  color: #d93025;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.input-item {
+  --border-color: #ccc;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  --highlight-color-focused: #4c8bf5;
+  transition: border-color 0.3s ease;
+}
+
+.input-item.ion-focused {
+  --border-color: #4c8bf5;
+  box-shadow: 0 0 8px #4c8bf5aa;
+}
+
+.register-btn {
+ --background: #f7c183 !important;
+  color: rgb(0, 0, 0) !important;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 15px rgba(76, 139, 245, 0.3);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-btn:hover:not(:disabled) {
+  --background: #f5c895 !important;
+  box-shadow: 0 10px 20px rgba(58, 111, 208, 0.5);
+}
+
+.register-btn:disabled {
+  --background: #a3bffa !important;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: #33475b;
+}
+
+
+.label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}

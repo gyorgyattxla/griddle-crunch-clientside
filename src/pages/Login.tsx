@@ -1,7 +1,13 @@
 import { IonContent, IonPage } from '@ionic/react';
+import { useHistory } from 'react-router-dom';
 import './Login.css';
 
+
+
+
 const Login: React.FC = () => {
+  
+  const history = useHistory();
   return (
     <IonPage>
       <IonContent>
@@ -67,7 +73,15 @@ const Login: React.FC = () => {
                   </div>
 
                   <div className="text-center mt-3">
-                    Not registered yet? <a href="#">Create an account</a>
+                    Not registered yet? <a
+                    href="#"
+                    onClick={e => {
+                      e.preventDefault();
+                      history.push('/register');
+                    }}
+                  >
+                        Create an account
+                      </a>
                   </div>
                   </div>
                 </form>
