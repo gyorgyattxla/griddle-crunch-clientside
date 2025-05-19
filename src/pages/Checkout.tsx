@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
 import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonList,
-  IonToast,
-  IonSelect,
-  IonSelectOption
+  IonPage,  IonHeader,  IonToolbar,  IonTitle,
+  IonContent,  IonItem,  IonLabel,  IonInput,
+  IonButton,  IonList,  IonToast,  IonSelect,
+  IonSelectOption,  IonButtons,  IonIcon
 } from '@ionic/react';
 
+import { walletOutline } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
+import { useState, /*useEffect*/ } from 'react';
+
+import './Checkout.css';
+import { useCart } from '../context/cartContext';
+
 const Checkout: React.FC = () => {
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const { cart, addToCart, removeFromCart, getFinalAmount } = useCart();
+  const history = useHistory();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -29,8 +28,11 @@ const Checkout: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
 
   const handleChange = (e: CustomEvent) => {
-    const { name, value } = e.detail;
-    setForm(prev => ({ ...prev, [name]: value }));
+  const target = e.target as HTMLInputElement;
+  const name = target.name;
+  const value = e.detail.value;
+
+  setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,15 +46,40 @@ const Checkout: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Checkout</IonTitle>
+        <IonTitle>Griddle & Crunch</IonTitle>
+        <IonButtons slot="end">
+            <IonButton onClick={() => history.push('/login')}>Bejelentkezés</IonButton>
+            <IonButton onClick={() => history.push('/register')} color="primary">
+            Regisztráció
+            </IonButton>
+        </IonButtons>
         </IonToolbar>
-      </IonHeader>
+    </IonHeader>
 
       <IonContent fullscreen className="ion-padding">
         <form onSubmit={handleSubmit}>
+            <ul>
+            {cart.map((item) => (
+              <li key={item.id} className="cart-item">
+              <span>{item.name}</span>
+              <span>{item.quantity} x {item.price} Ft</span>
+              <IonButton
+                fill="clear"
+                color="danger"
+                size="small"
+                onClick={() => removeFromCart(item.id)}
+              >
+                Törlés
+              </IonButton>
+            </li>
+            ))}
+          </ul>
+        <div className="cart-total">
+          <h4>Összesen: {getFinalAmount()} Ft</h4>
+        </div>
           <IonList>
             <IonItem>
-              <IonLabel position="stacked">Name</IonLabel>
+              <IonLabel position="stacked">Teljes név</IonLabel>
               <IonInput
                 name="name"
                 value={form.name}
@@ -62,7 +89,7 @@ const Checkout: React.FC = () => {
             </IonItem>
 
             <IonItem>
-              <IonLabel position="stacked">Email</IonLabel>
+              <IonLabel position="stacked">Email cím</IonLabel>
               <IonInput
                 type="email"
                 name="email"
@@ -73,7 +100,7 @@ const Checkout: React.FC = () => {
             </IonItem>
 
             <IonItem>
-              <IonLabel position="stacked">Address</IonLabel>
+              <IonLabel position="stacked">Cím</IonLabel>
               <IonInput
                 name="address"
                 value={form.address}
@@ -83,13 +110,14 @@ const Checkout: React.FC = () => {
             </IonItem>
 
             <IonItem>
-            <IonLabel position="stacked">Payment Method</IonLabel>
+            <IonLabel position="stacked">Fizetési mód</IonLabel>
             <IonSelect
                 value={paymentMethod}
                 onIonChange={(e) => setPaymentMethod(e.detail.value)}
             >
-            <IonSelectOption value="card">Card</IonSelectOption>
-            <IonSelectOption value="cash">Cash</IonSelectOption>
+            <IonSelectOption value="cash">Készpénz</IonSelectOption>
+            <IonSelectOption value="card_pickup">Kártya (Átvételkor)</IonSelectOption>
+            <IonSelectOption value="card">Kártya (Most)</IonSelectOption>
             </IonSelect>
             </IonItem>
 
@@ -130,11 +158,14 @@ const Checkout: React.FC = () => {
                 </IonItem>
             </>
             )}
+            <IonButton className='order-btn' onClick={() => history.push('/home')}>
+                <IonIcon icon={walletOutline} /> Főoldal
+            </IonButton>
           </IonList>
 
           <div className="ion-padding">
             <IonButton expand="block" type="submit">
-              Pay Now
+              Rendelés leadása
             </IonButton>
           </div>
         </form>
@@ -142,7 +173,7 @@ const Checkout: React.FC = () => {
         <IonToast
           isOpen={showToast}
           onDidDismiss={() => setShowToast(false)}
-          message="Payment submitted successfully!"
+          message="Rendelés sikeresen leadva!"
           duration={2000}
         />
       </IonContent>

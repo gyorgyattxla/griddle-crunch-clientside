@@ -9,7 +9,6 @@ import { fetchCategories } from '../api/Api';
 import { fetchProducts } from '../api/Api';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { CartProvider } from '../context/cartContext';
 import { useCart } from '../context/cartContext';
 
 import 'swiper/css';
