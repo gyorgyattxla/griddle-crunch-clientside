@@ -13,3 +13,9 @@ export const fetchProducts = async () => {
   if (!res.ok) throw new Error('Hiba a termékek lekérésekor');
   return res.json();
 };
+
+export async function fetchProductById(id: number) {
+  const res = await fetch(`http://localhost:8080/products/${id}`);
+  if (!res.ok) throw new Error('Hiba a termék lekérésekor');
+  return res.json();
+}

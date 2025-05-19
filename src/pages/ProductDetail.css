@@ -1,0 +1,28 @@
+.product-imagestyle {
+  width: 100%;
+  height: auto;
+}
+
+.product-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+
+.product-cards img {
+    width: 200px;
+    height: 250px;
+    padding: 10px;
+    object-fit: cover;
+}
+
+.product-price,
+.product-ingradients{
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
