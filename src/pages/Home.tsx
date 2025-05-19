@@ -2,12 +2,10 @@ import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
   IonButtons, IonButton, IonIcon
 } from '@ionic/react';
-import { cartOutline, closeOutline } from 'ionicons/icons';
+import { cart, cartOutline, closeOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { fetchCategories } from '../api/categoryApi';
 import { fetchProducts } from '../api/productApi';
-import 'swiper/css';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -23,6 +21,7 @@ const Home: React.FC = () => {
   const BASE_URL = 'http://localhost:8080';
 
   const toggleCart = () => setCartOpen(prev => !prev);
+  const openCart = () => setCartOpen(true);
 
   useEffect(() => {
     fetchProducts()
@@ -35,7 +34,8 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <IonPage>
+  
+    <IonPage>    
       <IonHeader>
         <IonToolbar>
           <IonTitle>Griddle & Crunch</IonTitle>
@@ -52,19 +52,49 @@ const Home: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-
         {/* Kosár panel */}
-        <div className={`cart-panel ${cartOpen ? 'open' : ''}`}>
-          <div className="cart-header">
-            <h3>Kosár</h3>
-            <IonButton fill="clear" onClick={toggleCart}>
-              <IonIcon icon={closeOutline} />
-            </IonButton>
-          </div>
-          <div className="cart-content">
-            <p>A kosarad üres.</p>
-          </div>
+      <div className={`cart-panel ${cartOpen ? 'open' : ''}`}>
+        <div className="cart-header">
+          <h3>Kosár</h3>
+          <IonButton fill="clear" onClick={toggleCart}>
+            <IonIcon icon={closeOutline} />
+          </IonButton>
         </div>
+
+        <div className="cart-content">
+          {cart.length === 0 ? (
+            <p>A kosarad üres.</p>
+          ) : (
+            <>
+          <ul>
+            {cart.map((item) => (
+              <li key={item.id} className="cart-item">
+              <span>{item.name}</span>
+              <span>{item.quantity} x {item.price} Ft</span>
+              <IonButton
+                fill="clear"
+                color="danger"
+                size="small"
+                onClick={() => removeFromCart(item.id)}
+              >
+                Törlés
+              </IonButton>
+            </li>
+            ))}
+          </ul>
+        <div className="cart-total">
+          <h4>Összesen: {getFinalAmount()} Ft</h4>
+        </div>
+        <div className='checkout-btn'>
+          <IonButton onClick={() => history.push('/checkout')}>
+          <IonIcon icon={walletOutline} /> Fizetéshez
+          </IonButton>
+        </div>
+      </>
+          )}
+          
+        </div>
+      </div>
 
         {/* Hero szekció */}
         <section className="hero-section">
@@ -130,6 +160,7 @@ const Home: React.FC = () => {
         </section>
       </IonContent>
     </IonPage>
+    
   );
 };
 
