@@ -7,12 +7,26 @@ import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetchCategories } from '../api/Api';
 import { fetchProducts } from '../api/Api';
+import { getUserId, clearUserData } from '../utils/auth';
  
 import { useCart } from '../context/cartContext';
  
 import './Home.css';
- 
 const Home: React.FC = () => {
+  
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    const userId = getUserId();
+    setIsLoggedIn(!!userId);
+  }, []);
+
+  const handleLogout = () => {
+    clearUserData();
+    setIsLoggedIn(false);
+    history.push('/');
+  };
+
   const history = useHistory();
   const [cartOpen, setCartOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,10 +67,21 @@ const Home: React.FC = () => {
             <IonButton onClick={toggleCart}>
               <IonIcon icon={cartOutline} />
             </IonButton>
-            <IonButton onClick={() => history.push('/login')}>Bejelentkezés</IonButton>
-            <IonButton onClick={() => history.push('/register')} color="primary">
-              Regisztráció
-            </IonButton>
+            <IonButtons slot="end">
+              {!isLoggedIn && (
+                <>
+                <IonButton onClick={() => history.push('/login')}>Bejelentkezés</IonButton>
+                <IonButton onClick={() => history.push('/register')} color="primary">
+                Regisztráció
+                </IonButton>
+              </>
+              )}
+              {isLoggedIn && (
+                <IonButton onClick={() => { handleLogout(); window.location.reload(); }}>
+                    Kijelentkezés
+                </IonButton>
+              )}
+            </IonButtons>
           </IonButtons>
         </IonToolbar>
       </IonHeader>

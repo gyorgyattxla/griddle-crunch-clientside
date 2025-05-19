@@ -7,12 +7,27 @@ import {
 
 import { walletOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
-import { useState, /*useEffect*/ } from 'react';
+import { useEffect, useState, /*useEffect*/ } from 'react';
 
 import './Checkout.css';
 import { useCart } from '../context/cartContext';
+import { clearUserData, getUserId } from '../utils/auth';
 
 const Checkout: React.FC = () => {
+
+const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    const userId = getUserId();
+    setIsLoggedIn(!!userId);
+  }, []);
+
+  const handleLogout = () => {
+      clearUserData();
+      setIsLoggedIn(false);
+      history.push('/');
+    };
+
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const { cart, addToCart, removeFromCart, getFinalAmount } = useCart();
   const history = useHistory();
@@ -48,10 +63,19 @@ const Checkout: React.FC = () => {
         <IonToolbar>
         <IonTitle>Griddle & Crunch</IonTitle>
         <IonButtons slot="end">
-            <IonButton onClick={() => history.push('/login')}>Bejelentkezés</IonButton>
-            <IonButton onClick={() => history.push('/register')} color="primary">
-            Regisztráció
-            </IonButton>
+            {!isLoggedIn && (
+                <>
+                <IonButton onClick={() => history.push('/login')}>Bejelentkezés</IonButton>
+                <IonButton onClick={() => history.push('/register')} color="primary">
+                Regisztráció
+                </IonButton>
+              </>
+              )}
+              {isLoggedIn && (
+                <IonButton onClick={() => { handleLogout(); window.location.reload(); }}>
+                    Kijelentkezés
+                </IonButton>
+              )}
         </IonButtons>
         </IonToolbar>
     </IonHeader>

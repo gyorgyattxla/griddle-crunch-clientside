@@ -2,6 +2,7 @@ import { IonButton, IonContent, IonInput, IonPage } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Login.css';
 import { useState } from 'react';
+import { saveUserId } from '../utils/auth';
 
 
 
@@ -43,9 +44,9 @@ const Login: React.FC = () => {
     if (!response.ok) {
       throw new Error(data.message || 'Ismeretlen hiba történt.');
     }
-
     alert('Sikeres belépés!');
-    history.push('/');
+    saveUserId(data.client.id);
+    window.location.href = '/home';
   } catch (error: any) {
     setError(error.message);
   } finally {
