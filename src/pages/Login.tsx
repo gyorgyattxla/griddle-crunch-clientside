@@ -1,11 +1,58 @@
-import { IonContent, IonPage } from '@ionic/react';
+import { IonButton, IonContent, IonInput, IonPage } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Login.css';
+import { useState } from 'react';
 
 
 
 
 const Login: React.FC = () => {
+  
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+  
+    const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault(); // 💡 prevent full page reload
+
+  setError(null);
+
+  if (!email || !password) {
+    setError('Minden mezőt ki kell tölteni!');
+    return;
+  }
+  if (password.length < 6) {
+    setError('A jelszónak legalább 6 karakter hosszúnak kell lennie!');
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const response = await fetch('http://localhost:8080/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Ismeretlen hiba történt.');
+    }
+
+    alert('Sikeres belépés!');
+    history.push('/');
+  } catch (error: any) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+  };
+
   
   const history = useHistory();
   return (
@@ -39,16 +86,19 @@ const Login: React.FC = () => {
 
                 <div className="divider-text">or sign in with email</div>
 
-                <form className="login-form">
+                <form className="login-form" onSubmit={handleLogin}>
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">
                       Email
                     </label>
-                    <input
+                    <IonInput
                       type="email"
                       className="form-control"
                       id="email"
                       placeholder="me@domain.com"
+                      value={email}
+                      onIonChange={e => setEmail(e.detail.value!)}
+                      required
                     />
                   </div>
 
@@ -56,16 +106,22 @@ const Login: React.FC = () => {
                     <label htmlFor="password" className="form-label">
                       Password
                     </label>
-                    <input
+                    <IonInput
                       type="password"
                       className="form-control"
                       id="password"
+                      value={password}
+                      onIonChange={e => setPassword(e.detail.value!)}
                       placeholder="Password"
                     />
                   </div>
 
-                  <button type="submit" className="btn btn-primary w-100 login-btn">
-                    Login
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary w-100 login-btn"
+                    //onClick={handleLogin}
+                    >
+                    {loading ? 'Feldolgozás...' : 'Belépés'}
                   </button>
                   <div className="login-footer">
                   <div className="text-center mt-3">

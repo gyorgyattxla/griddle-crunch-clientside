@@ -20,37 +20,62 @@ import './Register.css'; // CSS importálása
 const Register: React.FC = () => {
   const history = useHistory();
 
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
-    setError(null);
+  const handleRegister = async () => {
+  setError(null);
 
-    if (!email || !password || !password2) {
-      setError('Minden mezőt ki kell tölteni!');
-      return;
-    }
-    if (password !== password2) {
-      setError('A jelszavak nem egyeznek!');
-      return;
-    }
-    if (password.length < 6) {
-      setError('A jelszónak legalább 6 karakter hosszúnak kell lennie!');
-      return;
+  if (!firstName || !lastName || !email || !password || !password2) {
+    setError('Minden mezőt ki kell tölteni!');
+    return;
+  }
+  if (password !== password2) {
+    setError('A jelszavak nem egyeznek!');
+    return;
+  }
+  if (password.length < 6) {
+    setError('A jelszónak legalább 6 karakter hosszúnak kell lennie!');
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const response = await fetch('http://localhost:8080/api/register', { // Use your Yii2 endpoint here
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        password:password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.log(data.message)
+      throw new Error(data.message || 'Ismeretlen hiba történt.');
     }
 
-    setLoading(true);
-
-    // Itt jönne a regisztrációs API hívás (példa)
-    setTimeout(() => {
-      setLoading(false);
-      alert('Sikeres regisztráció!');
-      history.push('/login'); // Vissza a bejelentkezéshez
-    }, 1500);
-  };
+    alert('Sikeres regisztráció!');
+    history.push('/login');
+  } catch (error: any) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <IonPage>
@@ -76,10 +101,10 @@ const Register: React.FC = () => {
           
           <IonInput
             type="text"
+            value={firstName}
+            onIonChange={e => setFirstName(e.detail.value!)}
             required
-            inputMode="text"
-            autocapitalize="off"
-            placeholder='Keresztnév'
+            placeholder="Keresztnév"
           />
         </IonItem>
         <IonLabel position="floating" className='label'>Vezetéknév</IonLabel>
@@ -87,10 +112,10 @@ const Register: React.FC = () => {
           
           <IonInput
             type="text"
+            value={lastName}
+            onIonChange={e => setLastName(e.detail.value!)}
             required
-            inputMode="text"
-            autocapitalize="off"
-            placeholder='Vezetéknév'
+            placeholder="Vezetéknév"
           />
         </IonItem>
         <IonLabel position="floating" className='label'>Email cím</IonLabel>
