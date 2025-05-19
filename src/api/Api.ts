@@ -13,3 +13,19 @@ export const fetchProducts = async () => {
   if (!res.ok) throw new Error('Hiba a termékek lekérésekor');
   return res.json();
 };
+
+export const saveOrder = async (orderData: any) => {
+  const response = await fetch(`${API_URL}/checkout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(orderData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to save order');
+  }
+
+  return response.json();
+};

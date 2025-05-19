@@ -13,6 +13,8 @@ import './Checkout.css';
 import { useCart } from '../context/cartContext';
 import { clearUserData, getUserId } from '../utils/auth';
 
+import { saveOrder } from '../api/Api';
+
 const Checkout: React.FC = () => {
 
 const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -29,7 +31,7 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     };
 
   const [paymentMethod, setPaymentMethod] = useState('cash');
-  const { cart, addToCart, removeFromCart, getFinalAmount } = useCart();
+  const { cart, removeFromCart, getFinalAmount } = useCart();
   const history = useHistory();
   const [form, setForm] = useState({
     name: '',
@@ -50,12 +52,38 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', form);
     setShowToast(true);
-    // You could integrate Stripe, PayPal, etc. here
-  };
+  try {
+    const userId = getUserId();
+
+    const orderData = {
+      client_id: userId || null,
+      client_name: form.name,
+      client_address: form.address,
+      payment_method: paymentMethod,
+      meals: cart.map(item => ({
+        id: item.id,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+    };
+    console.log(orderData);
+    await saveOrder(orderData);
+
+    setShowToast(true);
+    // Optionally clear cart and go to home
+    setTimeout(() => {
+      history.push('/home');
+      window.location.reload(); // optional: force full reload
+    }, 1500);
+  } catch (err) {
+    console.error(err);
+    alert('Hiba történt a rendelés leadása közben.');
+  }
+};
 
   return (
     <IonPage>
