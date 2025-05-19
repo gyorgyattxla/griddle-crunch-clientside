@@ -13,9 +13,14 @@ import './Home.css';
 const Home: React.FC = () => {
   const history = useHistory();
   const [cartOpen, setCartOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categories, setCategories] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [products, setProducts] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
+
+  const BASE_URL = 'http://localhost:8080';
 
   const toggleCart = () => setCartOpen(prev => !prev);
 
@@ -81,34 +86,40 @@ const Home: React.FC = () => {
         </section>
 
         {/* Kategória sáv*/}
-        <section className="category-carousel">
-          <h2>Kategóriák</h2>
-          <div className="category-scroll">
-            {(categories.length ? categories : [
-            ]).map((cat, idx) => (
-              <SwiperSlide key={idx} className="category-slide">
-                <img src={cat.image} alt={cat.name} />
-                <p>{cat.name}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+<section className="category-carousel">
+  <h2>Kategóriák</h2>
+  <div className="category-scroll">
+    {(categories.length ? categories : []).map((cat, idx) => (
+      <div key={idx} className="category-slide">
+        {cat.image ? (
+          <img src={`${BASE_URL}/uploads/categories/${cat.image}`} alt={cat.name} />
+        ) : (
+          <div style={{width: '100px', height: '100px', backgroundColor: '#ccc'}} />
+        )}
+        <p>{cat.name}</p>
+      </div>
+    ))}
+  </div>
+</section>
 
-        {/* Termékek */}
-        <section className="products">
-          <h2>Products</h2>
-          <div className="product-grid">
-            {(products.length ? products : [
-            ]).map(product => (
-              <div className="product-card" key={product.id}>
-                <img src={product.image} alt={product.name} />
-                <h4>{product.name}</h4>
-                <p>{product.price} Ft</p>
-                <IonButton size="small">Buy</IonButton>
-              </div>
-            ))}
-          </div>
-        </section>
+{/* Termékek */}
+<section className="products">
+  <h2>Products</h2>
+  <div className="product-grid">
+    {(products.length ? products : []).map(product => (
+      <div className="product-card" key={product.id}>
+        {product.image ? (
+          <img src={`${BASE_URL}/uploads/${product.image}`} alt={product.name} />
+        ) : (
+          <div style={{width: '150px', height: '150px', backgroundColor: '#eee'}} />
+        )}
+        <h4>{product.name}</h4>
+        <p>{product.price} Ft</p>
+        <IonButton size="small">Buy</IonButton>
+      </div>
+    ))}
+  </div>
+</section>
 
         {/* Banner / Kupon */}
         <section className="promo-banner">
