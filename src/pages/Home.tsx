@@ -11,6 +11,8 @@ import { fetchProducts } from '../api/Api';
 import { useCart } from '../context/cartContext';
  
 import './Home.css';
+
+const STORAGE_KEY = 'griddle_crunch_cart';
  
 const Home: React.FC = () => {
   const history = useHistory();
@@ -21,8 +23,30 @@ const Home: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
-  const { cart, addToCart, removeFromCart, getFinalAmount } = useCart();
+  const { cart, addToCart, removeFromCart, getFinalAmount, setCartFromStorage } = useCart();
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+
+   // Betöltés localStorage-ból a komponens indulásakor
+useEffect(() => {
+  const savedCart = localStorage.getItem(STORAGE_KEY);
+  if (savedCart) {
+    try {
+      const parsedCart = JSON.parse(savedCart);
+      setCartFromStorage(parsedCart);
+    } catch {
+      console.warn('Kosár betöltése sikertelen a localStorage-ból');
+    }
+  }
+}, [setCartFromStorage]);
+
+  // Kosár változásakor mentés localStorage-ba
+  useEffect(() => {
+    if (cart.length) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, [cart]);
  
   const toggleCart = () => setCartOpen(prev => !prev);
   const openCart = () => setCartOpen(true);
@@ -32,6 +56,8 @@ const Home: React.FC = () => {
   const filteredProducts = selectedCategoryId
   ? products.filter(product => product.category_id === selectedCategoryId)
   : products;
+
+  
  
   useEffect(() => {
     fetchProducts()

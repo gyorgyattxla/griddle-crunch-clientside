@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
 import { CartItem, Product } from './cartTypes';
 
 interface CartContextType {
@@ -6,8 +6,10 @@ interface CartContextType {
   addToCart: (product: Product) => void;
   removeFromCart: (id: number) => void;
   getFinalAmount: () => number;
+  setCartFromStorage: (cart: CartItem[]) => void;  // EZT hozzáadjuk
 }
 
+// Létrehozod a Context-et:
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
@@ -34,11 +36,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getFinalAmount = (): number => {
-  return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   };
 
+const setCartFromStorage = useCallback((storedCart: CartItem[]) => {
+    setCart(storedCart);
+  }, []);
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, getFinalAmount }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, getFinalAmount, setCartFromStorage }}>
       {children}
     </CartContext.Provider>
   );
