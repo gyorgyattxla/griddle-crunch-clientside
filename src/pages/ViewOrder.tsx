@@ -61,7 +61,7 @@ const ViewOrder: React.FC = () => {
 
   intervalId = setInterval(() => {
     getData();
-  }, 60000); 
+  }, 30000); 
 
   return () => clearInterval(intervalId);
 }, [orderId]);

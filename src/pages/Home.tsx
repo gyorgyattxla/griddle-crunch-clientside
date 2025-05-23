@@ -1,6 +1,9 @@
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
-  IonButtons, IonButton, IonIcon
+  IonButtons, IonButton, IonIcon,
+  IonList,
+  IonItem,
+  IonLabel
 } from '@ionic/react';
 import { cartOutline, closeOutline, walletOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
@@ -82,6 +85,24 @@ useEffect(() => {
     fetchCategories()
       .then(data => setCategories(data))
       .catch(err => setError(err.message));
+  }, []);
+
+  interface OpenHour {
+  day_name: string;
+  open_time: string;
+  close_time: string;
+  }
+  const [openHours, setOpenHours] = useState<OpenHour[]>([]);
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/get-open-hours`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => setOpenHours(data))
+      .catch(error => console.error('Error fetching open hours:', error));
   }, []);
  
   return (
@@ -284,9 +305,17 @@ useEffect(() => {
             <p>CODE: <strong> WELCOME25</strong></p>
           </div>
         </section>
-
-        
+        <IonList>
+          {openHours.map((item, index) => (
+            <IonItem key={index}>
+              <IonLabel>
+                {item.day_name}: {item.open_time} - {item.close_time}
+              </IonLabel>
+            </IonItem>
+          ))}
+        </IonList>
       </IonContent>
+        
     </IonPage>
    
   );
