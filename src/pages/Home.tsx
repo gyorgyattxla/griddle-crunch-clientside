@@ -1,9 +1,7 @@
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
   IonButtons, IonButton, IonIcon,
-  IonList,
-  IonItem,
-  IonLabel
+ 
 } from '@ionic/react';
 import { cartOutline, closeOutline, walletOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
@@ -205,8 +203,7 @@ useEffect(() => {
         <section className="hero-section">
           <div className="hero-text">
             <h2>Griddle &Crunch</h2>
-            <p>Best Fast Foods in your Area</p>
-            <button className='order_btn'>ORDER</button>
+            <p>Legjobb ételek a környékeden</p>
           </div>
           <div className="hero-image">
             <img src="/assets/fast_foods.png" alt="hero" />
@@ -215,43 +212,42 @@ useEffect(() => {
  
         {/* Infó kártyák */}
         <section className="info-cards">
-          <div className="info-card">🚚 Fast Delivery</div>
-          <div className="info-card">🥬 Fresh Ingredients</div>
-          <div className="info-card">💳 Pay Without Contact</div>
+          <div className="info-card">🚚 Gyors szállítás</div>
+          <div className="info-card">🥬 Friss alapanyagok</div>
+          <div className="info-card">💳 Fizess érintkezés nélkül</div>
         </section>
 
-
              {/* Kategória sáv - görgethető */}
-<section className="category-carousel">
-  <h2>Kategóriák</h2>
-  <div className="category-scroll">
-    {(categories.length ? categories : []).map((cat, idx) => (
-      <div
-  key={idx}
-  className="category-slide"
-  onClick={() =>
-  setSelectedCategoryId((prev) => (prev === cat.id ? null : cat.id))
-}
-  style={{ cursor: 'pointer' }}
->
-  {cat.image ? (
-    <img
-      src={`${BASE_URL}/uploads/categories/${cat.image}`}
-      alt={cat.name}
-    />
-  ) : (
-    <div style={{
-      width: '100px',
-      height: '100px',
-      backgroundColor: '#ccc',
-      borderRadius: '6px',
-    }} />
-  )}
-  <p>{cat.name}</p>
-</div>
-    ))}
-  </div>
-</section>
+      <section className="category-carousel">
+        <h2>Kategóriák</h2>
+        <div className="category-scroll">
+          {(categories.length ? categories : []).map((cat, idx) => (
+            <div
+        key={idx}
+        className="category-slide"
+        onClick={() =>
+        setSelectedCategoryId((prev) => (prev === cat.id ? null : cat.id))
+      }
+        style={{ cursor: 'pointer' }}
+      >
+        {cat.image ? (
+          <img
+            src={`${BASE_URL}/uploads/categories/${cat.image}`}
+            alt={cat.name}
+          />
+        ) : (
+          <div style={{
+            width: '100px',
+            height: '100px',
+            backgroundColor: '#ccc',
+            borderRadius: '6px',
+          }} />
+        )}
+        <p>{cat.name}</p>
+      </div>
+          ))}
+        </div>
+      </section>
  
              {/* Termékek */}
 <section className="products">
@@ -298,22 +294,42 @@ useEffect(() => {
   </div>
 </section>
  
-        {/* Banner / Kupon */}
-        <section className="promo-banner">
-          <div className="promo-content">
-            <h3>✨ 25% Off From Your First Order</h3>
-            <p>CODE: <strong> WELCOME25</strong></p>
+
+
+        <footer className="footer p-4 bg-white rounded-xl shadow-md">
+          
+          <div className="flex justify-center items-center mb-4">
+            <h2 className="text-xl font-semibold mb-4 text-center text-gray-800">Kapcsolat</h2>
+            <IonButton
+              onClick={() => history.push('/contact')}
+              className="bg-blue-500 text-white rounded-lg px-4 py-2"
+            >
+              Kapcsolatfelvétel
+            </IonButton>
           </div>
-        </section>
-        <IonList>
-          {openHours.map((item, index) => (
-            <IonItem key={index}>
-              <IonLabel>
-                {item.day_name}: {item.open_time} - {item.close_time}
-              </IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
+
+          
+          <div className="grid gap-3">
+            <h2 className="text-xl font-semibold mb-4 text-center text-gray-800">Nyitvatartás</h2>
+            {openHours.map((item, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center px-4 py-2 bg-gray-50 rounded-lg border border-gray-200"
+              >
+                <span className="text-gray-700 font-medium">{item.day_name}: </span>
+                <span className="text-gray-600">{item.open_time} - {item.close_time}</span>
+              </div>
+            ))}
+          </div>
+          
+        </footer>
+        <div className="footer text-center mt-4">
+            <h1>
+              <span className="text-gray-600">Griddle & Crunch</span>
+              <span className="text-gray-600"> © 2025</span>
+              <span className="text-gray-600"> Minden jog fenntartva.</span>
+            </h1>
+          </div>
       </IonContent>
         
     </IonPage>
