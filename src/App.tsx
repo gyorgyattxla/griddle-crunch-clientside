@@ -4,6 +4,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Checkout from './pages/Checkout';
+import ViewOrder from './pages/ViewOrder';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -50,6 +51,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/checkout">
           <Checkout />
+        </Route>
+        <Route exact path="/vieworder/:orderId">
+          <ViewOrder />
         </Route>
         <Route path="/register" component={Register} exact />
         <Route exact path="/">
