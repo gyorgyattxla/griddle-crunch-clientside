@@ -7,11 +7,11 @@ import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetchCategories } from '../api/Api';
 import { fetchProducts } from '../api/Api';
-import { getUserId, clearUserData } from '../utils/auth';
- 
+
 import { useCart } from '../context/cartContext';
  
 import './Home.css';
+import { clearUserData, getUserId } from '../utils/auth';
 
 const STORAGE_KEY = 'griddle_crunch_cart';
  
@@ -133,10 +133,13 @@ useEffect(() => {
     <li key={item.id} className="cart-item">
       <div className="cart-item-image">
         {item.image ? (
-          <img
-            src={`${BASE_URL}/uploads/${item.image}`}
-            alt={item.name}
-          />
+         <img
+    src={item.image.includes('uploads/')
+      ? item.image
+      : `${BASE_URL}/uploads/${item.image}`
+    }
+    alt={item.name}
+  />
         ) : (
           <div
             style={{
@@ -234,7 +237,12 @@ useEffect(() => {
   <h2>Products</h2>
   <div className="product-grid">
     {(filteredProducts.length ? filteredProducts : []).map((product) => (
-      <div className="product-card" key={product.id}>
+      <div
+        className="product-card"
+        key={product.id}
+        onClick={() => history.push(`/product/${product.id}`)}
+        style={{ cursor: 'pointer', position: 'relative' }}
+      >
         {product.image ? (
           <img
             src={`${BASE_URL}/uploads/${product.image}`}
@@ -252,9 +260,12 @@ useEffect(() => {
         )}
         <h4>{product.name}</h4>
         <p>{product.price} Ft</p>
+
+        {/* Buy gomb – kattintás megállítása, ne navigáljon */}
         <IonButton
           size="small"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation(); // Ne triggerelje a kártya onClick-jét
             addToCart(product);
             openCart();
           }}
