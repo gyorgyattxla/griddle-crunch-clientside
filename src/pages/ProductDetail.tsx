@@ -73,52 +73,53 @@ const imageUrl = product.image
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen className="card">
-        <IonCard className="product-cards">
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt={product.name}
-              className="product-image"
-            />
-          )}
+ <IonContent fullscreen className="card">
+  <div className="product-wrapper">
+    <IonCard className="product-cards">
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt={product.name}
+          className="product-image"
+        />
+      )}
 
-          <IonCardHeader className="product-header">
-            <IonTitle className="product-title">{product.name}</IonTitle>
-            <IonCardSubtitle className="product-price">{product.price} Ft</IonCardSubtitle>
-          </IonCardHeader>
+      <IonCardHeader className="product-header">
+        <IonTitle className="product-title">{product.name}</IonTitle>
+        <IonCardSubtitle className="product-price">{product.price} Ft</IonCardSubtitle>
+      </IonCardHeader>
 
-          <IonCardContent className="product-content">
-            <strong>Összetevők:</strong>
-            <p className="product-ingradients">{product.ingredients}</p>
-          </IonCardContent>
+      <IonCardContent className="product-content">
+        <strong>Összetevők:</strong>
+        <p className="product-ingradients">{product.ingredients}</p>
+      </IonCardContent>
 
-          <IonButton
-            expand="block"
-            size="default"
-            color="success"
-            className="add-to-cart-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(product);
+      <IonButton
+        expand="block"
+        size="default"
+        color="success"
+        className="add-to-cart-button"
+        onClick={(e) => {
+          e.stopPropagation();
+          addToCart(product);
+        }}
+      >
+        Kosárba
+      </IonButton>
+    </IonCard>
+  </div>
 
-            }}
-          >
-            Kosárba
-          </IonButton>
-        </IonCard>
-
-        <div className="back-button-container">
-          <IonButton
-            fill="outline"
-            color="medium"
-            onClick={() => history.goBack()}
-            className="back-button"
-          >
-            Vissza
-          </IonButton>
-        </div>
-      </IonContent>
+  <div className="back-button-container">
+    <IonButton
+      fill="outline"
+      color="medium"
+      onClick={() => history.goBack()}
+      className="back-button"
+    >
+      Vissza
+    </IonButton>
+  </div>
+</IonContent>
     </IonPage>
   );
 };
