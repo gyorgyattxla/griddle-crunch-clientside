@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   IonPage,
   IonHeader,
@@ -92,6 +93,16 @@ const imageUrl = product.image
       <IonCardContent className="product-content">
         <strong>Összetevők:</strong>
         <p className="product-ingradients">{product.ingredients}</p>
+        {product.allergens && product.allergens.length > 0 && (
+  <>
+    <strong>Allergének:</strong>
+    <ul>
+      {product.allergens.map((a: any) => (
+        <li key={a.id}>{a.name}</li>
+      ))}
+    </ul>
+  </>
+)}
       </IonCardContent>
 
       <IonButton

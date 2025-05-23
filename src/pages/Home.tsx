@@ -284,6 +284,8 @@ useEffect(() => {
             <p>CODE: <strong> WELCOME25</strong></p>
           </div>
         </section>
+
+        
       </IonContent>
     </IonPage>
    
