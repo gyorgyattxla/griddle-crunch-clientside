@@ -31,7 +31,7 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     };
 
   const [paymentMethod, setPaymentMethod] = useState('cash');
-  const { cart, removeFromCart, getFinalAmount } = useCart();
+  const { cart, removeFromCart, getFinalAmount, clearCart } = useCart();
   const history = useHistory();
   const [form, setForm] = useState({
     name: '',
@@ -72,16 +72,45 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     };
     console.log(orderData);
     await saveOrder(orderData);
-
     setShowToast(true);
     // Optionally clear cart and go to home
     setTimeout(() => {
+      clearCart();
       history.push('/home');
       window.location.reload(); // optional: force full reload
     }, 1500);
   } catch (err) {
     console.error(err);
     alert('Hiba történt a rendelés leadása közben.');
+  }
+};
+
+  const fetchCurrentAddress = async () => {
+  if (!navigator.geolocation) {
+    alert('A böngésződ nem támogatja a helymeghatározást.');
+    return;
+  }
+
+  try {
+    const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+
+    const { latitude, longitude } = position.coords;
+
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+    );
+    const data = await response.json();
+
+    if (data.display_name) {
+      setForm((prev) => ({ ...prev, address: data.display_name }));
+    } else {
+      alert('Nem sikerült lekérni a címet.');
+    }
+  } catch (err) {
+    alert('Hiba történt a cím lekérésekor.');
+    console.error(err);
   }
 };
 
@@ -159,7 +188,9 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
                 onIonChange={handleChange}
                 required
               />
-              <IonButton>Jelenlegi cím lekérése</IonButton>
+              <IonButton onClick={fetchCurrentAddress}>
+                Jelenlegi cím lekérése
+              </IonButton>
             </IonItem>
 
             <IonItem>

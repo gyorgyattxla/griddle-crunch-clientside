@@ -1,6 +1,7 @@
 import {
   IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonButtons
+  IonContent, IonButton, IonButtons,
+  IonIcon
 } from '@ionic/react';
 
 import { useHistory, useParams } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { clearUserData, getUserId } from '../utils/auth';
 
 import MapComponent from '../components/MapComponent';
+import { walletOutline } from 'ionicons/icons';
 
 const ViewOrder: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
@@ -101,6 +103,11 @@ const ViewOrder: React.FC = () => {
         ) : (
           <p>Loading map location...</p>
         )}
+        {orderStatus == 'delivered' ? (
+        <IonButton className='order-btn' onClick={() => history.push('/home')}>
+          <IonIcon icon={walletOutline} /> Főoldal
+        </IonButton>
+        ) : null}
       </IonContent>
     </IonPage>
   );
