@@ -6,7 +6,8 @@ interface CartContextType {
   addToCart: (product: Product) => void;
   removeFromCart: (id: number) => void;
   getFinalAmount: () => number;
-  setCartFromStorage: (cart: CartItem[]) => void;  // EZT hozzáadjuk
+  setCartFromStorage: (cart: CartItem[]) => void;
+  clearCart: () => void;
 }
 
 // Létrehozod a Context-et:
@@ -46,8 +47,13 @@ const setCartFromStorage = useCallback((storedCart: CartItem[]) => {
     setCart(storedCart);
   }, []);
 
+  const clearCart = () => {
+  setCart([]);
+  localStorage.removeItem('cart');
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, getFinalAmount, setCartFromStorage }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, getFinalAmount, setCartFromStorage, clearCart }}>
       {children}
     </CartContext.Provider>
   );
