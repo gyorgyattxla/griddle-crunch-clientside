@@ -159,6 +159,7 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
                 onIonChange={handleChange}
                 required
               />
+              <IonButton>Jelenlegi cím lekérése</IonButton>
             </IonItem>
 
             <IonItem>
