@@ -54,7 +54,6 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', form);
     setShowToast(true);
   try {
     const userId = getUserId();
@@ -71,13 +70,14 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
       })),
     };
     console.log(orderData);
-    await saveOrder(orderData);
+    const response = await saveOrder(orderData);
+    console.log("Save order response:", response);
+    const orderId = response.orderId;
     setShowToast(true);
-    // Optionally clear cart and go to home
     setTimeout(() => {
       clearCart();
-      history.push('/home');
-      window.location.reload(); // optional: force full reload
+      history.push(`/vieworder/${orderId}`);
+      window.location.reload();
     }, 1500);
   } catch (err) {
     console.error(err);
