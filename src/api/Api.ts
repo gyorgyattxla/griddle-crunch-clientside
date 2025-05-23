@@ -14,6 +14,7 @@ export const fetchProducts = async () => {
   return res.json();
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const saveOrder = async (orderData: any) => {
   const response = await fetch(`${API_URL}/checkout`, {
     method: 'POST',
@@ -29,3 +30,8 @@ export const saveOrder = async (orderData: any) => {
 
   return response.json();
 };
+export async function fetchProductById(id: number) {
+  const res = await fetch(`http://localhost:8080/products/${id}`);
+  if (!res.ok) throw new Error('Hiba a termék lekérésekor');
+  return res.json();
+}

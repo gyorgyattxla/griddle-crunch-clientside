@@ -36,10 +36,13 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import Register from './pages/Register';
+import { CartProvider } from './context/cartContext';
+import ProductDetail from './pages/ProductDetail';
 
 setupIonicReact();
 
 const App: React.FC = () => (
+   <CartProvider>
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
@@ -56,12 +59,14 @@ const App: React.FC = () => (
           <ViewOrder />
         </Route>
         <Route path="/register" component={Register} exact />
+        <Route path="/product/:id" component={ProductDetail} />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
+  </CartProvider>
 );
 
 export default App;
