@@ -10,6 +10,7 @@ import { clearUserData, getUserId } from '../utils/auth';
 
 import MapComponent from '../components/MapComponent';
 import { walletOutline } from 'ionicons/icons';
+import './ViewOrder.css'
 
 const ViewOrder: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
@@ -61,7 +62,7 @@ const ViewOrder: React.FC = () => {
 
   intervalId = setInterval(() => {
     getData();
-  }, 30000); 
+  }, 60000); 
 
   return () => clearInterval(intervalId);
 }, [orderId]);
@@ -93,6 +94,7 @@ const ViewOrder: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen className="ion-padding">
+        <div className='content-wrapper'>
         {orderStatus ? (
           <p> Rendelés státusza: {orderStatus} </p> 
         ) : (
@@ -108,6 +110,7 @@ const ViewOrder: React.FC = () => {
           <IonIcon icon={walletOutline} /> Főoldal
         </IonButton>
         ) : null}
+        </div>
       </IonContent>
     </IonPage>
   );
