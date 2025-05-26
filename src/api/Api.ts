@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080';
+const API_URL = 'http://dev01.szitar.net';
 
 export async function fetchCategories() {
   const response = await fetch(`${API_URL}/categories`);
@@ -31,7 +31,7 @@ export const saveOrder = async (orderData: any) => {
   return response.json();
 };
 export async function fetchProductById(id: number) {
-  const res = await fetch(`http://localhost:8080/products/${id}`);
+  const res = await fetch(`${API_URL}/products/${id}`);
   if (!res.ok) throw new Error('Hiba a termék lekérésekor');
   return res.json();
 }
