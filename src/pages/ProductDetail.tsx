@@ -17,7 +17,7 @@ import { fetchProductById } from '../api/Api';
 import { useCart } from '../context/cartContext'; // <- kosár kontextus
 import './ProductDetail.css';
 
-const BASE_URL = 'http://dev01.szitar.net';
+const BASE_URL = 'https://dev01.szitar.net';
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();

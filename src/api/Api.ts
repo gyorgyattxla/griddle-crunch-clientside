@@ -1,4 +1,4 @@
-const API_URL = 'http://dev01.szitar.net';
+const API_URL = 'https://dev01.szitar.net';
 
 export async function fetchCategories() {
   const response = await fetch(`${API_URL}/categories`);

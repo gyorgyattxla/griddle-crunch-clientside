@@ -67,7 +67,7 @@ useEffect(() => {
   const toggleCart = () => setCartOpen(prev => !prev);
   const openCart = () => setCartOpen(true);
 
-  const BASE_URL = 'http://dev01.szitar.net';
+  const BASE_URL = 'https://dev01.szitar.net';
 
   const filteredProducts = selectedCategoryId
   ? products.filter(product => product.category_id === selectedCategoryId)

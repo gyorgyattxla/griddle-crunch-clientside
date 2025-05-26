@@ -33,7 +33,7 @@ const Login: React.FC = () => {
   setLoading(true);
 
   try {
-    const response = await fetch('http://dev01.szitar.net/api/login', {
+    const response = await fetch('https://dev01.szitar.net/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

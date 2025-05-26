@@ -22,7 +22,7 @@ const ViewOrder: React.FC = () => {
 
   const fetchOrder = async (orderId: number) => {
     try {
-      const response = await fetch(`http://dev01.szitar.net/vieworder/${orderId}`, {
+      const response = await fetch(`https://dev01.szitar.net/vieworder/${orderId}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
