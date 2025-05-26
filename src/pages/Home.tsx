@@ -6,8 +6,7 @@ import {
 import { cartOutline, closeOutline, walletOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { fetchCategories } from '../api/Api';
-import { fetchProducts } from '../api/Api';
+import { fetchCategories, fetchProducts } from '../api/Api';
 
 import { useCart } from '../context/cartContext';
  

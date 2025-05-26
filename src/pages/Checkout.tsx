@@ -69,7 +69,6 @@ const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
         quantity: item.quantity,
       })),
     };
-    console.log(orderData);
     const response = await saveOrder(orderData);
     console.log("Save order response:", response);
     const orderId = response.orderId;
