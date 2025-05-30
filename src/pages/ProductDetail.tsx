@@ -38,11 +38,17 @@ const ProductDetail: React.FC = () => {
         setLoading(false);
       })
       .catch(() => {
+        console.log('fail.')
         setProduct(null);
         setLoading(false);
       });
       
   }, [id]);
+  useEffect(() => {
+  if (product) {
+    console.log('Loaded product:', product);
+  }
+}, [product]);
 
   if (loading) {
     return (
@@ -98,6 +104,7 @@ const imageUrl = product.image
     <strong>Allergének:</strong>
     <ul>
       {product.allergens.map((a: any) => (
+        console.log('Allergens:', product.allergens),
         <li key={a.id}>{a.name}</li>
       ))}
     </ul>

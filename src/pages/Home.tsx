@@ -131,7 +131,7 @@ useEffect(() => {
         </IonToolbar>
       </IonHeader>
  
-      <IonContent fullscreen>
+      <IonContent>
         {/* Kosár panel */}
       <div className={`cart-panel ${cartOpen ? 'open' : ''}`}>
         <div className="cart-header">
