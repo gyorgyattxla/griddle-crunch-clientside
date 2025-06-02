@@ -1,8 +1,9 @@
 export interface Product {
   id: number;
   name: string;
-  image: string;
   price: number;
+  image?: string;
+  ingredients?: string;
 }
 
 export interface CartItem extends Product {

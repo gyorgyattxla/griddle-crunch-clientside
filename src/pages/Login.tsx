@@ -1,4 +1,6 @@
-import { IonButton, IonContent, IonInput, IonPage } from '@ionic/react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { IonContent, IonInput, IonPage } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Login.css';
 import { useState } from 'react';
@@ -31,7 +33,7 @@ const Login: React.FC = () => {
   setLoading(true);
 
   try {
-    const response = await fetch('http://localhost:8080/api/login', {
+    const response = await fetch('https://dev01.szitar.net', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,16 +78,6 @@ const Login: React.FC = () => {
                   <h2>Login to your Account</h2>
                   <p>See what is going on with your business.</p>
                 </div>
-
-                <button className="btn btn-outline-secondary w-75 mb-3 google-btn">
-                  <img
-                    src="https://img.icons8.com/color/16/000000/google-logo.png"
-                    alt="Google"
-                  />
-                  &nbsp; Continue with Google
-                </button>
-
-                <div className="divider-text">or sign in with email</div>
 
                 <form className="login-form" onSubmit={handleLogin}>
                   <div className="mb-3">

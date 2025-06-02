@@ -1,0 +1,10 @@
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertical centering */
+  align-items: center;       /* horizontal centering */
+  height: 100%;              /* must fill IonContent */
+  width: 100%;
+  text-align: center;
+  gap: 1rem;
+}

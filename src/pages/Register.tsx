@@ -48,7 +48,7 @@ const Register: React.FC = () => {
   setLoading(true);
 
   try {
-    const response = await fetch('http://localhost:8080/api/register', { // Use your Yii2 endpoint here
+    const response = await fetch('https://dev01.szitar.net', { // Use your Yii2 endpoint here
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

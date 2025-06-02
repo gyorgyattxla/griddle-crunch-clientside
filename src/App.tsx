@@ -1,6 +1,8 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Checkout from './pages/Checkout';
@@ -36,32 +38,54 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import Register from './pages/Register';
+import { CartProvider } from './context/cartContext';
+import ProductDetail from './pages/ProductDetail';
+import { useEffect } from 'react';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/checkout">
-          <Checkout />
-        </Route>
-        <Route exact path="/vieworder/:orderId">
-          <ViewOrder />
-        </Route>
-        <Route path="/register" component={Register} exact />
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  useEffect(() => {
+    const initStatusBar = async () => {
+      try {
+        if (Capacitor.getPlatform() !== 'web') {
+          await StatusBar.hide();
+          await StatusBar.setStyle({ style: Style.Dark }); // optional
+        }
+      } catch (e) {
+        console.warn('Failed to hide status bar:', e);
+      }
+    };
+    initStatusBar();
+  }, []);
+
+  return (
+    <CartProvider>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/home">
+              <Home />
+            </Route>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/checkout">
+              <Checkout />
+            </Route>
+            <Route exact path="/vieworder/:orderId">
+              <ViewOrder />
+            </Route>
+            <Route path="/register" component={Register} exact />
+            <Route path="/product/:id" component={ProductDetail} />
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+    </CartProvider>
+  );
+};
 
 export default App;

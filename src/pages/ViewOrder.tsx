@@ -1,6 +1,7 @@
 import {
   IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonButtons
+  IonContent, IonButton, IonButtons,
+  IonIcon
 } from '@ionic/react';
 
 import { useHistory, useParams } from 'react-router-dom';
@@ -8,6 +9,8 @@ import { useEffect, useState } from 'react';
 import { clearUserData, getUserId } from '../utils/auth';
 
 import MapComponent from '../components/MapComponent';
+import { walletOutline } from 'ionicons/icons';
+import './ViewOrder.css'
 
 const ViewOrder: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
@@ -19,7 +22,7 @@ const ViewOrder: React.FC = () => {
 
   const fetchOrder = async (orderId: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/vieworder/${orderId}`, {
+      const response = await fetch(`https://dev01.szitar.net/vieworder/${orderId}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -91,6 +94,7 @@ const ViewOrder: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen className="ion-padding">
+        <div className='content-wrapper'>
         {orderStatus ? (
           <p> Rendelés státusza: {orderStatus} </p> 
         ) : (
@@ -101,6 +105,12 @@ const ViewOrder: React.FC = () => {
         ) : (
           <p>Loading map location...</p>
         )}
+        {orderStatus == 'delivered' ? (
+        <IonButton className='order-btn' onClick={() => history.push('/home')}>
+          <IonIcon icon={walletOutline} /> Főoldal
+        </IonButton>
+        ) : null}
+        </div>
       </IonContent>
     </IonPage>
   );

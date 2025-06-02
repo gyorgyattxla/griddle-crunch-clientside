@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { Geolocation } from '@capacitor/geolocation';
 import 'leaflet/dist/leaflet.css';
 
 import L from 'leaflet';
@@ -14,7 +15,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 interface MapComponentProps {
-  locationNames: string[]; // array of location names
+  locationNames: string[];
 }
 
 // Resize fix
@@ -45,6 +46,7 @@ const FitToAllMarkers: React.FC<{ positions: [number, number][] }> = ({ position
 const MapComponent: React.FC<MapComponentProps> = ({ locationNames }) => {
   const hungaryCenter: [number, number] = [47.1625, 19.5033];
   const [markerData, setMarkerData] = useState<{ name: string; position: [number, number] }[]>([]);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
   useEffect(() => {
     const fetchCoordinates = async (name: string): Promise<{ name: string; position: [number, number] } | null> => {
@@ -69,15 +71,38 @@ const MapComponent: React.FC<MapComponentProps> = ({ locationNames }) => {
     loadAllCoordinates();
   }, [locationNames]);
 
+  useEffect(() => {
+    const getUserLocation = async () => {
+      try {
+        const permission = await Geolocation.requestPermissions();
+        if (permission.location === 'granted') {
+          const coords = await Geolocation.getCurrentPosition();
+          setUserLocation([coords.coords.latitude, coords.coords.longitude]);
+        } else {
+          console.warn('Location permission not granted');
+        }
+      } catch (error) {
+        console.error('Failed to get user location:', error);
+      }
+    };
+
+    getUserLocation();
+  }, []);
+
+  const allPositions = [
+    ...markerData.map((m) => m.position),
+    ...(userLocation ? [userLocation] : []),
+  ];
+
   return (
     <div style={{ height: '600px', width: '600px' }}>
       <MapContainer
-        center={markerData[0]?.position || hungaryCenter}
+        center={userLocation || markerData[0]?.position || hungaryCenter}
         zoom={7}
         style={{ height: '100%', width: '100%' }}
       >
         <ResizeFix />
-        {markerData.length > 0 && <FitToAllMarkers positions={markerData.map((m) => m.position)} />}
+        {allPositions.length > 0 && <FitToAllMarkers positions={allPositions} />}
         <TileLayer
           attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -87,6 +112,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ locationNames }) => {
             <Popup>{marker.name}</Popup>
           </Marker>
         ))}
+        {userLocation && (
+          <Marker position={userLocation}>
+            <Popup>Your location</Popup>
+          </Marker>
+        )}
       </MapContainer>
     </div>
   );
